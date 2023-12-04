@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ingressWithCicd
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app1: web2
+  template: 
+   metadata:
+     labels:
+       app2: web2
+   spec:
+     containers:
+       - name: con1
+         image: img
+         imagePullPolicy: Always
+         ports:
+           - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app0: web0
+    name: second
+spec:
+  ports:
+    - name: http
+      port: 8080
+      protocol: TCP
+      targetPort: 80
+  type: LoadBalancer
+  selector:
+    app2: web2
